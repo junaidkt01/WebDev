@@ -1,0 +1,26 @@
+<section style="background-color: #343484; height: 100%;">
+    <div class="container">
+        <div class="row">
+            {{#each products}}
+
+            <div class="col-md-3 mt-4">
+                <div class="card" style="width: 13em; border: inset; border-color: cadetblue; background: floralwhite;">
+                    <img class="card-img-top mt-1" style="height: 4em; width: 4em; margin-left: 4em;"
+                        src="/product-images/{{this._id}}.jpg" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">{{this.Name}}</h5>
+                        <p class="card-text">Rs. {{this.Price}}</p>
+                        <p class="card-text">{{this.Description}}</p>
+                        <button onclick="addToCart('{{this._id}}')" class="btn btn-primary"
+                            style="font-size: revert; margin-left: 3.2em;">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+
+            {{/each}}
+        </div>
+    </div>
+</section>
+<section style="background-color: #343484; height:15em;">
+
+</section>

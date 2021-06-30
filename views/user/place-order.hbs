@@ -1,0 +1,131 @@
+<section style="display: grid; place-items: center; background-color: #5a5a80;">
+    <div style="margin-top: 1em;">
+        <h2 class="container">Enter Delivery Details</h2>
+    </div>
+</section>
+<section class="text-white" style="padding-top: 1em; background-color: #343484;">
+    <div class="ml-5">
+        <form action="" id="checkout-form" style="width: 55em;">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="container">
+                        <label for="">Adress</label>
+                        <input class="form-control" type="text" id="address" name="address">
+                        <label for="">Pincode</label>
+                        <input class="form-control" type="text" id="pincode" name="pincode">
+                        <label for="">Mobile</label>
+                        <input class="form-control" type="text" id="mobile" name="mobile">
+                        <input type="text" name="userId" id="" value="{{user._id}}" hidden>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="container mt-5 ml-5 checkout">
+                        <h5>Total Amount : Rs.{{total}}</h5>
+                        <hr>
+                        <div class="payment">
+                            <p>Payment method</p>
+                            <label class="radio-inline">
+                                <input type="radio" name="payment-method" value="COD" checked>COD
+                            </label>
+                            <label class="radio-inline mt-2">
+                                <input type="radio" name="payment-method" value="ONLINE">Online-payment
+                            </label>
+                            <button class="btn btn-primary" type="submit">Checkout</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div style="display: grid; place-items: center; margin-top: 4.3em;">
+        <hr style="background-color: black; width: 100%;">
+        <p>Contact Me : 9961260138</p>
+    </div>
+</section>
+<script>
+    $("#checkout-form").submit((e) => {
+        e.preventDefault()
+        $.ajax({
+            url: '/place-order',
+            method: 'post',
+            data: $('#checkout-form').serialize(),
+            success: (response) => {
+                
+                console.log(response)
+                if (response.codSuccess) {
+                    location.href = '/order-success'
+                } else {
+                    razorpayPayment(response)
+                }
+            }
+        })
+    })
+    function razorpayPayment(order) {
+        var options = {
+            "key": "rzp_test_DFyfDo8KA2ePiQ", // Enter the Key ID generated from the Dashboard
+            "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "The Ghost",
+            "description": "Test Transaction",
+            "image": "https://example.com/your_logo",
+            "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "handler": function (response) {
+                
+
+                verifyPayment(response, order)
+            },
+            "prefill": {
+                "name": "Gaurav Kumar",
+                "email": "gaurav.kumar@example.com",
+                "contact": "9999999999"
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+        var rzp1 = new Razorpay(options)
+        rzp1.open()
+    }
+    function verifyPayment(payment, order) {
+        $.ajax({
+            url: '/verify-Payment',
+            data: {
+                payment,
+                order
+            },
+            method: 'POST',
+            success:(response)=>{
+                if(response.status){
+                    location.href='/order-success'
+                }else{
+                    alert("payment failed")
+                }
+            }
+        })
+    }
+</script>
+<style>
+    input[type=radio] {
+        width: 20px;
+        height: 20px;
+    }
+
+    label.radio-inline {
+        display: flex;
+        align-items: center;
+    }
+
+    .chekout {
+        border: 1px solid;
+        border-radius: 3px;
+        padding: 30px;
+    }
+
+    .payment {
+        padding-bottom: 16px;
+        border: thin;
+    }
+</style>

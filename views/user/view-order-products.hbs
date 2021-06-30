@@ -1,0 +1,28 @@
+<section class="text-white" style="background-color: #343484; display: grid; place-items: center;">
+    <hr>
+    <h3>View Order List</h3>
+    <hr>
+</section>
+<section style="background-color: #343484; height: 50em;">
+    <div class="container">
+        <div class="row">
+            {{#each products}}
+            <div class="col-md-3 mt-4" style="margin-bottom: 1em;">
+                <div class="card" style="width: 13em;">
+                    <img class="card-img-top" src="/product-images/{{this.product._id}}.jpg" alt="Card image cap"
+                        style="height: 7em; width: 7em; margin-left: 3em;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{this.product.Name}}</h5>
+                        <strong class="card-text">Rs : {{this.product.Price}}</strong>
+                        <p class="card-text">Quantity : {{this.quantity}}</p>
+                        <p class="card-text">{{this.product.Description}}</p>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</section>
+<script>
+
+</script>
